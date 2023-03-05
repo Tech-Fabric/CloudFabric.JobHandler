@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="6.0.4" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Model\" />
+    <None Remove="Repository\" />
+    <None Remove="Repository\Interface\" />
+    <None Remove="Service\" />
+    <None Remove="Service\Interface\" />
+    <None Remove="Enum\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+    <Folder Include="Repository\" />
+    <Folder Include="Repository\Interface\" />
+    <Folder Include="Service\" />
+    <Folder Include="Service\Interface\" />
+    <Folder Include="Enum\" />
+  </ItemGroup>
+</Project>
