@@ -26,6 +26,8 @@ public class Startup
     {
         services.AddSingleton<IConfiguration>(GetIConfigurationRoot());
         services.AddTransient<IEditableRepository<Job>, EditableRepositoryPostgres<Job>>();
+        services.AddTransient<IEditableRepository<JobProcess>, EditableRepositoryPostgres<JobProcess>>();
+        services.AddTransient<IEditableRepository<JobCompleted>, EditableRepositoryPostgres<JobCompleted>>();
         services.AddScoped<IJobService, JobService>();
     }
 }
