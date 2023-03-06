@@ -30,7 +30,7 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
     public T Get(object id)
     {
         using var conn = GetConnection();
-        var query = $"{_selectString} where {KeyField} = @id";
+        var query = $"{_selectString} where \"{KeyField}\" = @id";
         var queryResult = conn.QueryFirst<T>(query, new { id = id });
         return queryResult;
     }

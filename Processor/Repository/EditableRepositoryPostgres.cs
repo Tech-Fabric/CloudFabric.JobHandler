@@ -104,19 +104,19 @@ public class EditableRepositoryPostgres<T>: ReadableRepositoryPostgres<T>, IEdit
         {
             if (!string.Equals(prop, KeyField, StringComparison.OrdinalIgnoreCase))
             {
-                updateQuery.Append($"{prop}=@{prop},");
+                updateQuery.Append($"\"{prop}\"=@{prop},");
             }
         });
 
         //remove last comma
         updateQuery.Remove(updateQuery.Length - 1, 1);
-        updateQuery.Append($" where {KeyField}=@{KeyField}");
+        updateQuery.Append($" where \"{KeyField}\"=@{KeyField}");
 
         return updateQuery.ToString();
     }
 
     private string GenerateDeleteQuery() =>
-        $"delete from \"{_tableName}\" where {KeyField}=@{KeyField}";
+        $"delete from \"{_tableName}\" where \"{KeyField}\"=@{KeyField}";
 
     private static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties) =>
         listOfProperties
@@ -125,7 +125,7 @@ public class EditableRepositoryPostgres<T>: ReadableRepositoryPostgres<T>, IEdit
 
     public void DeleteById(Guid id)
     {
-        var deleteQuery = GenerateDeleteQuery().Replace($"@{KeyField}", id.ToString());
+        var deleteQuery = GenerateDeleteQuery().Replace($"@{KeyField}", $"\'{id.ToString()}\'");
 
         using var connection = GetConnection();
         connection.Execute(deleteQuery);
