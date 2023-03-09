@@ -195,4 +195,15 @@ public class JobTest
         var completed = _jobService.GetAllJobCompleted();
         Assert.Contains(completed, item => item.JobId == job.Id && item.JobStatusId == statusId);
     }
+
+    [Fact]
+    public void CheckDefaultJobType()
+    {
+        // Act
+        var jobTypes = _jobService.GetJobTypes();
+
+     
+        // Assert
+        Assert.Contains(jobTypes, item => item.Id == 1);
+    }
 }

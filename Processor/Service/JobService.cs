@@ -1,4 +1,4 @@
-using System;
+
 using System.Transactions;
 using CloudFabric.JobHandler.Processor.Enum;
 using CloudFabric.JobHandler.Processor.Model;
@@ -12,14 +12,17 @@ public class JobService: IJobService
     private readonly IEditableRepository<Job> _jobRepository;
     private readonly IEditableRepository<JobProcess> _jobProcessRepository;
     private readonly IEditableRepository<JobCompleted> _jobCompleteRepository;
+    private readonly IReadableRepository<JobType> _jobTypeRepository;
 
     public JobService(IEditableRepository<Job> jobRepository,
         IEditableRepository<JobProcess> jobProcessRepository,
-        IEditableRepository<JobCompleted> jobCompleteRepository)
+        IEditableRepository<JobCompleted> jobCompleteRepository,
+        IReadableRepository<JobType> jobTypeRepository)
     {
         _jobRepository = jobRepository;
         _jobProcessRepository = jobProcessRepository;
         _jobCompleteRepository = jobCompleteRepository;
+        _jobTypeRepository = jobTypeRepository;
     }
 
     public Job CreateJob(int jobTypeId)
@@ -68,7 +71,7 @@ public class JobService: IJobService
     public void DeleteJob(Guid jobId) =>
         _jobRepository.DeleteById(jobId);
 
-    private JobProcess GetJobProcessByJobId(Guid jobId) =>
+    public JobProcess GetJobProcessByJobId(Guid jobId) =>
         _jobProcessRepository.Search(new Dictionary<string, object>() { { nameof(JobProcess.JobId), jobId } }).First();
 
     public void FailJob(Guid jobId)
@@ -145,5 +148,8 @@ public class JobService: IJobService
 
     public void DeleteCompleted(Guid jobCompletedId) =>
         _jobCompleteRepository.DeleteById(jobCompletedId);
+
+    public IEnumerable<JobType> GetJobTypes() =>
+        _jobTypeRepository.GetAll();
 }
 
