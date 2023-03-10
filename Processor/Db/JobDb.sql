@@ -32,7 +32,8 @@ CREATE TABLE public."Job" (
     "JobTypeId" integer NOT NULL,
     "Created" timestamp without time zone NOT NULL,
     "CreatorId" integer,
-    "JobStatusId" integer NOT NULL
+    "JobStatusId" integer NOT NULL,
+    "Parameters" text
 );
 
 

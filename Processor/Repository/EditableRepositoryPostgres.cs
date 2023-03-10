@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Reflection;
 using System.Text;
+using CloudFabric.JobHandler.Processor.Model.Settings;
 using CloudFabric.JobHandler.Processor.Repository.Interface;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace CloudFabric.JobHandler.Processor.Repository;
 
@@ -18,7 +20,7 @@ public class EditableRepositoryPostgres<T>: ReadableRepositoryPostgres<T>, IEdit
     private static IEnumerable<PropertyInfo> Properties => typeof(T).GetProperties().Except(EnumerableProperties);
 
 
-    public EditableRepositoryPostgres(IConfiguration configuration): base(configuration)
+    public EditableRepositoryPostgres(IOptions<JobHandlerSettings> settings) : base(settings)
 	{
         _tableName = $"{typeof(T).Name}";
     }
@@ -28,6 +30,7 @@ public class EditableRepositoryPostgres<T>: ReadableRepositoryPostgres<T>, IEdit
         var insertQuery = GenerateInsertQuery(true);
 
         using var connection = GetConnection();
+     
         return connection.QuerySingle<Guid>(insertQuery, entity);
     }
 

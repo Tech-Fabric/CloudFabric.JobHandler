@@ -1,4 +1,6 @@
-﻿using CloudFabric.JobHandler.Processor.Model;
+﻿using CloudFabric.JobHandler.Processor.Extension;
+using CloudFabric.JobHandler.Processor.Model;
+using CloudFabric.JobHandler.Processor.Model.Settings;
 using CloudFabric.JobHandler.Processor.Repository;
 using CloudFabric.JobHandler.Processor.Repository.Interface;
 using CloudFabric.JobHandler.Processor.Service;
@@ -11,7 +13,7 @@ namespace CloudFabric.JobHandler.Processor.Tests;
 
 public class Startup
 {
-    public IConfigurationRoot GetIConfigurationRoot()
+    public IConfiguration GetConfiguration()
     {
         return new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -20,16 +22,11 @@ public class Startup
             .Build();
     }
 
-    public IConfigurationRoot Configuration => GetIConfigurationRoot();
-
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddSingleton<IConfiguration>(GetIConfigurationRoot());
-        services.AddTransient<IEditableRepository<Job>, EditableRepositoryPostgres<Job>>();
-        services.AddTransient<IEditableRepository<JobProcess>, EditableRepositoryPostgres<JobProcess>>();
-        services.AddTransient<IEditableRepository<JobCompleted>, EditableRepositoryPostgres<JobCompleted>>();
-        services.AddTransient<IReadableRepository<JobType>, ReadableRepositoryPostgres<JobType>>();
-        services.AddScoped<IJobService, JobService>();
+        var configuration = GetConfiguration();
+        services.AddSingleton<IConfiguration>(configuration);
+        services.AddJobHandler(configuration);
     }
 }
 

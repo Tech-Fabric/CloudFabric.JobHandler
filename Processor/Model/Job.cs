@@ -8,5 +8,6 @@ public class Job
     public int JobStatusId { get; set; }
     public DateTime Created { get; set; }
     public int CreatorId { get; set; }
+    public string? Parameters { get; set; }
 }
 

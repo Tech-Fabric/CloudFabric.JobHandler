@@ -25,7 +25,7 @@ public class JobService: IJobService
         _jobTypeRepository = jobTypeRepository;
     }
 
-    public Job CreateJob(int jobTypeId)
+    public Job CreateJob(int jobTypeId, string parameters)
     {
         Job job = new Job()
         {
@@ -33,7 +33,8 @@ public class JobService: IJobService
             CreatorId = 0,
             Created = DateTime.Now,
             JobStatusId = (int)JobStatusEnum.Ready,
-            JobTypeId = jobTypeId
+            JobTypeId = jobTypeId,
+            Parameters = parameters
         };
 
         _jobRepository.Insert(job);

@@ -1,4 +1,3 @@
-using System;
 namespace CloudFabric.JobHandler.Processor.Model;
 
 public class JobType

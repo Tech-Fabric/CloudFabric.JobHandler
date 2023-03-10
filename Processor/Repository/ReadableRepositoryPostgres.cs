@@ -5,6 +5,8 @@ using Npgsql;
 using Dapper;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using CloudFabric.JobHandler.Processor.Model.Settings;
 
 namespace CloudFabric.JobHandler.Processor.Repository;
 
@@ -12,17 +14,17 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
 {
     private readonly string _tableName;
     private readonly string _selectString;
-    private readonly IConfiguration _configuration;
+    private readonly JobHandlerSettings _settings;
 
     public string KeyField { get; set; } = "Id";
 
     protected NpgsqlConnection GetConnection() =>
-        new NpgsqlConnection(_configuration.GetConnectionString("JobDb"));
+        new NpgsqlConnection(_settings.ConnectionString);
 
 
-    public ReadableRepositoryPostgres(IConfiguration configuration)
+    public ReadableRepositoryPostgres(IOptions<JobHandlerSettings> settings)
     {
-        _configuration = configuration;
+        _settings = settings.Value;
         _tableName = $"{typeof(T).Name}";
         _selectString = $"select * from \"{_tableName}\"";
     }

@@ -5,7 +5,7 @@ namespace CloudFabric.JobHandler.Processor.Service.Interface;
 
 public interface IJobService
 {
-    Job CreateJob(int jobTypeId);
+    Job CreateJob(int jobTypeId, string parameters);
 
     IEnumerable<Job> GetListJobsByStatusId(int jobStatusId);
 

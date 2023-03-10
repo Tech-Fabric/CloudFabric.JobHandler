@@ -34,7 +34,7 @@ public class JobTest
     public void CreateAndCheckNewJob()
     {
         // Arrange
-        var job = _jobService.CreateJob(1);
+        var job = _jobService.CreateJob(1, string.Empty);
 
         // Act
         var jobs = _jobService.GetListJobsByStatusId((int)JobStatusEnum.Ready);
@@ -47,7 +47,7 @@ public class JobTest
     public void CreateAndUpdateNewJob()
     {
         // Arrange
-        var job = _jobService.CreateJob(1);
+        var job = _jobService.CreateJob(1, string.Empty);
 
         // Act
         _jobService.UpdateJobStatus(job.Id, (int)JobStatusEnum.InProgress);
@@ -61,7 +61,7 @@ public class JobTest
     public void CreateAndDeleteNewJob()
     {
         // Arrange
-        var job = _jobService.CreateJob(1);
+        var job = _jobService.CreateJob(1, string.Empty);
 
         // Act
         _jobService.DeleteJob(job.Id);
@@ -74,7 +74,7 @@ public class JobTest
     public void CreateAndRunProcessJob()
     {
         // Arrange
-        var job = _jobService.CreateJob(1);
+        var job = _jobService.CreateJob(1, string.Empty);
 
         // Act
         var process = _jobService.CreateJobProcess(job.Id);
@@ -89,7 +89,7 @@ public class JobTest
     public void CreateAndRunProcessNonExistingJob()
     {
         // Arrange
-        var job = _jobService.CreateJob(1);
+        var job = _jobService.CreateJob(1, string.Empty);
 
         // Act
         var process = _jobService.CreateJobProcess(Guid.Empty);
@@ -102,7 +102,7 @@ public class JobTest
     public void CreateAndUpdateProcessStatus()
     {
         // Arrange
-        var job = _jobService.CreateJob(1);
+        var job = _jobService.CreateJob(1, string.Empty);
 
         // Act
         var process = _jobService.CreateJobProcess(job.Id);
@@ -121,7 +121,7 @@ public class JobTest
     public void CreateAndUpdateProcessProgress()
     {
         // Arrange
-        var job = _jobService.CreateJob(1);
+        var job = _jobService.CreateJob(1, string.Empty);
 
         // Act
         var process = _jobService.CreateJobProcess(job.Id);
@@ -141,7 +141,7 @@ public class JobTest
     public void CreateAndCompleteJob(int statusId)
     {
         // Arrange
-        var job = _jobService.CreateJob(1);
+        var job = _jobService.CreateJob(1, string.Empty);
         var process = _jobService.CreateJobProcess(job.Id);
 
         Assert.NotNull(process);
@@ -171,7 +171,7 @@ public class JobTest
     public void CreateAndFailedJob(int statusId)
     {
         // Arrange
-        var job = _jobService.CreateJob(1);
+        var job = _jobService.CreateJob(1, string.Empty);
         var process = _jobService.CreateJobProcess(job.Id);
 
         Assert.NotNull(process);
