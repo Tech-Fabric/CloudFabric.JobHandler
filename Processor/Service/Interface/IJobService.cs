@@ -7,7 +7,7 @@ public interface IJobService
 {
     Job CreateJob(int jobTypeId, string parameters);
 
-    IEnumerable<Job> GetListJobsByStatusId(int jobStatusId);
+    IEnumerable<Job> GetListJobsByStatusId(int jobStatusId, int jobTypeId);
 
     IEnumerable<Job> GetAllJobs();
 
