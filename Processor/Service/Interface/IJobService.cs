@@ -23,7 +23,7 @@ public interface IJobService
     void DeleteProcess(Guid processId);
 
     void CompleteJob(Guid jobId);
-    void FailJob(Guid jobId);
+    void FailJob(Guid jobId, string errorMessage);
     IEnumerable<JobCompleted> GetAllJobCompleted();
     void DeleteCompleted(Guid jobCompletedId);
 

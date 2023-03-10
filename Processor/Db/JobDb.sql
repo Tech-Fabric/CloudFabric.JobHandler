@@ -48,7 +48,8 @@ CREATE TABLE public."JobCompleted" (
     "JobId" uuid NOT NULL,
     "JobStatusId" integer NOT NULL,
     "Completed" timestamp without time zone NOT NULL,
-    "Id" uuid NOT NULL
+    "Id" uuid NOT NULL,
+    "ErrorMessage" text
 );
 
 

@@ -75,14 +75,15 @@ public class JobService: IJobService
     public JobProcess GetJobProcessByJobId(Guid jobId) =>
         _jobProcessRepository.Search(new Dictionary<string, object>() { { nameof(JobProcess.JobId), jobId } }).First();
 
-    public void FailJob(Guid jobId)
+    public void FailJob(Guid jobId, string errorMessage)
     {
         JobCompleted jobCompleted = new JobCompleted()
         {
             Id = Guid.NewGuid(),
             JobId = jobId,
             JobStatusId = (int)JobStatusEnum.Failed,
-            Completed = DateTime.Now
+            Completed = DateTime.Now,
+            ErrorMessage = errorMessage
         };
 
         using (TransactionScope trx = new TransactionScope())

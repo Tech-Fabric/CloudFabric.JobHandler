@@ -170,6 +170,7 @@ public class JobTest
     [InlineData((int)JobStatusEnum.Failed)]
     public void CreateAndFailedJob(int statusId)
     {
+        string errorMsg = "Something wrong";
         // Arrange
         var job = _jobService.CreateJob(1, string.Empty);
         var process = _jobService.CreateJobProcess(job.Id);
@@ -183,7 +184,7 @@ public class JobTest
         for (int i = 1; i <= 54; i++)
             _jobService.UpdateProgress(procId, i);
 
-        _jobService.FailJob(job.Id);
+        _jobService.FailJob(job.Id, errorMsg);
 
         // Assert
         var jobs = _jobService.GetAllJobs();
@@ -193,7 +194,7 @@ public class JobTest
         Assert.Contains(processes, item => item.Id == procId && item.JobStatusId == statusId && item.Progress == 54);
 
         var completed = _jobService.GetAllJobCompleted();
-        Assert.Contains(completed, item => item.JobId == job.Id && item.JobStatusId == statusId);
+        Assert.Contains(completed, item => item.JobId == job.Id && item.JobStatusId == statusId && item.ErrorMessage == errorMsg);
     }
 
     [Fact]
