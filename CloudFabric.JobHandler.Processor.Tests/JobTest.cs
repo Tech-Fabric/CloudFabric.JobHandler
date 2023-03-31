@@ -7,7 +7,7 @@ namespace CloudFabric.JobHandler.Processor.Tests;
 public class JobTest
 {
     private readonly IJobService _jobService;
-
+    private readonly Guid _tenantId = Guid.NewGuid();
 
     public JobTest(IJobService jobService)
     {
@@ -31,10 +31,10 @@ public class JobTest
     }
 
     [Fact]
-    public void CreateAndCheckNewJob()
+    public void CreateAndCheckNewJobByStatus()
     {
         // Arrange
-        var job = _jobService.CreateJob(1, string.Empty);
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
         var jobs = _jobService.GetListJobsByStatusId((int)JobStatusEnum.Ready, 1);
@@ -44,10 +44,36 @@ public class JobTest
     }
 
     [Fact]
+    public void CreateAndCheckNewJobByTenant()
+    {
+        // Arrange
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
+
+        // Act
+        var jobs = _jobService.GetListJobsByTenantId(_tenantId);
+
+        // Assert
+        Assert.Contains(jobs, item => item.Id == job.Id);
+    }
+
+    [Fact]
+    public void CreateAndCheckNewJobByTenantAndStatus()
+    {
+        // Arrange
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
+
+        // Act
+        var jobs = _jobService.GetListJobsByTenantId(_tenantId, (int)JobStatusEnum.Ready);
+
+        // Assert
+        Assert.Contains(jobs, item => item.Id == job.Id);
+    }
+
+    [Fact]
     public void CreateAndUpdateNewJob()
     {
         // Arrange
-        var job = _jobService.CreateJob(1, string.Empty);
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
         _jobService.UpdateJobStatus(job.Id, (int)JobStatusEnum.InProgress);
@@ -61,7 +87,7 @@ public class JobTest
     public void CreateAndDeleteNewJob()
     {
         // Arrange
-        var job = _jobService.CreateJob(1, string.Empty);
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
         _jobService.DeleteJob(job.Id);
@@ -74,7 +100,7 @@ public class JobTest
     public void CreateAndRunProcessJob()
     {
         // Arrange
-        var job = _jobService.CreateJob(1, string.Empty);
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
         var process = _jobService.CreateJobProcess(job.Id);
@@ -89,7 +115,7 @@ public class JobTest
     public void CreateAndRunProcessNonExistingJob()
     {
         // Arrange
-        var job = _jobService.CreateJob(1, string.Empty);
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
         var process = _jobService.CreateJobProcess(Guid.Empty);
@@ -102,7 +128,7 @@ public class JobTest
     public void CreateAndUpdateProcessStatus()
     {
         // Arrange
-        var job = _jobService.CreateJob(1, string.Empty);
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
         var process = _jobService.CreateJobProcess(job.Id);
@@ -121,7 +147,7 @@ public class JobTest
     public void CreateAndUpdateProcessProgress()
     {
         // Arrange
-        var job = _jobService.CreateJob(1, string.Empty);
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
         var process = _jobService.CreateJobProcess(job.Id);
@@ -141,7 +167,7 @@ public class JobTest
     public void CreateAndCompleteJob(int statusId)
     {
         // Arrange
-        var job = _jobService.CreateJob(1, string.Empty);
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
         var process = _jobService.CreateJobProcess(job.Id);
 
         Assert.NotNull(process);
@@ -172,7 +198,7 @@ public class JobTest
     {
         string errorMsg = "Something wrong";
         // Arrange
-        var job = _jobService.CreateJob(1, string.Empty);
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
         var process = _jobService.CreateJobProcess(job.Id);
 
         Assert.NotNull(process);

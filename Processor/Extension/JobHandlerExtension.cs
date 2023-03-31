@@ -19,8 +19,7 @@ namespace CloudFabric.JobHandler.Processor.Extension
             services.AddTransient<IEditableRepository<JobCompleted>, EditableRepositoryPostgres<JobCompleted>>();
             services.AddTransient<IReadableRepository<JobType>, ReadableRepositoryPostgres<JobType>>();
             services.AddScoped<IJobService, JobService>();
-
-            services.Configure<JobHandlerSettings>(options => configuration.GetSection(JobHandlerSettings.Position));
+            services.AddOptions<JobHandlerSettings>().Bind(configuration.GetSection(JobHandlerSettings.Position));
 
             return services;
         }

@@ -5,7 +5,19 @@ namespace CloudFabric.JobHandler.Processor.Service.Interface;
 
 public interface IJobService
 {
-    Job CreateJob(int jobTypeId, string parameters);
+    Job CreateJob(int jobTypeId, string parameters, Guid tenantId);
+
+    JobProcess? CreateJobProcess(Guid jobId);
+
+    void UpdateProgress(Guid jobProcessId, int progress);
+
+    void CompleteJob(Guid jobId);
+
+    void FailJob(Guid jobId, string errorMessage);
+
+
+    IEnumerable<Job> GetListJobsByTenantId(Guid tenantId);
+    IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int jobStatusId);
 
     IEnumerable<Job> GetListJobsByStatusId(int jobStatusId, int jobTypeId);
 
@@ -15,16 +27,15 @@ public interface IJobService
 
     void DeleteJob(Guid jobId);
 
-    JobProcess? CreateJobProcess(Guid jobId);
     JobProcess GetJobProcessByJobId(Guid jobId);
+
     IEnumerable<JobProcess> GetAllProcesses();
-    void UpdateProgress(Guid jobProcessId, int progress);
     void UpdateProcessStatus(Guid jobProcessId, int jobStatusId);
     void DeleteProcess(Guid processId);
 
-    void CompleteJob(Guid jobId);
-    void FailJob(Guid jobId, string errorMessage);
+
     IEnumerable<JobCompleted> GetAllJobCompleted();
+
     void DeleteCompleted(Guid jobCompletedId);
 
     IEnumerable<JobType> GetJobTypes();

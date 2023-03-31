@@ -7,7 +7,7 @@ using CloudFabric.JobHandler.Processor.Service.Interface;
 
 namespace CloudFabric.JobHandler.Processor.Service;
 
-public class JobService: IJobService
+public class JobService : IJobService
 {
     private readonly IEditableRepository<Job> _jobRepository;
     private readonly IEditableRepository<JobProcess> _jobProcessRepository;
@@ -25,7 +25,7 @@ public class JobService: IJobService
         _jobTypeRepository = jobTypeRepository;
     }
 
-    public Job CreateJob(int jobTypeId, string parameters)
+    public Job CreateJob(int jobTypeId, string parameters, Guid tenantId)
     {
         Job job = new Job()
         {
@@ -34,7 +34,8 @@ public class JobService: IJobService
             Created = DateTime.Now,
             JobStatusId = (int)JobStatusEnum.Ready,
             JobTypeId = jobTypeId,
-            Parameters = parameters
+            Parameters = parameters,
+            TenantId = tenantId
         };
 
         _jobRepository.Insert(job);
@@ -125,9 +126,9 @@ public class JobService: IJobService
 
     public IEnumerable<JobProcess> GetAllProcesses() =>
         _jobProcessRepository.GetAll();
-    
+
     public IEnumerable<Job> GetListJobsByStatusId(int jobStatusId, int jobTypeId) =>
-        _jobRepository.Search(new Dictionary<string, object> { { nameof(Job.JobStatusId), jobStatusId } , { nameof(Job.JobTypeId), jobTypeId} });
+        _jobRepository.Search(new Dictionary<string, object> { { nameof(Job.JobStatusId), jobStatusId }, { nameof(Job.JobTypeId), jobTypeId } });
 
     public void UpdateJobStatus(Guid jobId, int newJobStatusId) =>
         _jobRepository.UpdateById(jobId, new Dictionary<string, object> { { nameof(Job.JobStatusId), newJobStatusId } });
@@ -153,5 +154,11 @@ public class JobService: IJobService
 
     public IEnumerable<JobType> GetJobTypes() =>
         _jobTypeRepository.GetAll();
-}
 
+    public IEnumerable<Job> GetListJobsByTenantId(Guid tenantId) =>
+        _jobRepository.Search(new Dictionary<string, object> { { nameof(Job.TenantId), tenantId } });
+
+    public IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int jobStatusId) =>
+        _jobRepository.Search(new Dictionary<string, object> { { nameof(Job.TenantId), tenantId }, { nameof(Job.JobStatusId), jobStatusId } });
+
+}

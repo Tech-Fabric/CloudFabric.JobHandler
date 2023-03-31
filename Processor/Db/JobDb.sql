@@ -33,11 +33,12 @@ CREATE TABLE public."Job" (
     "Created" timestamp without time zone NOT NULL,
     "CreatorId" integer,
     "JobStatusId" integer NOT NULL,
-    "Parameters" text
+    "Parameters" text,
+    "TenantId" uuid NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000'::uuid
 );
 
 
-ALTER TABLE public."Job" OWNER TO postgres;
+ALTER TABLE public."Job" OWNER TO fiber_pim_dev;
 
 --
 -- TOC entry 218 (class 1259 OID 16447)
@@ -53,7 +54,7 @@ CREATE TABLE public."JobCompleted" (
 );
 
 
-ALTER TABLE public."JobCompleted" OWNER TO postgres;
+ALTER TABLE public."JobCompleted" OWNER TO fiber_pim_dev;
 
 --
 -- TOC entry 217 (class 1259 OID 16442)
@@ -69,7 +70,7 @@ CREATE TABLE public."JobProcess" (
 );
 
 
-ALTER TABLE public."JobProcess" OWNER TO postgres;
+ALTER TABLE public."JobProcess" OWNER TO fiber_pim_dev;
 
 --
 -- TOC entry 219 (class 1259 OID 16450)
@@ -82,7 +83,7 @@ CREATE TABLE public."JobStatus" (
 );
 
 
-ALTER TABLE public."JobStatus" OWNER TO postgres;
+ALTER TABLE public."JobStatus" OWNER TO fiber_pim_dev;
 
 --
 -- TOC entry 215 (class 1259 OID 16429)
@@ -96,7 +97,7 @@ CREATE TABLE public."JobType" (
 );
 
 
-ALTER TABLE public."JobType" OWNER TO postgres;
+ALTER TABLE public."JobType" OWNER TO fiber_pim_dev;
 
 --
 -- TOC entry 214 (class 1259 OID 16428)
@@ -112,7 +113,7 @@ CREATE SEQUENCE public."TaskType_Id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."TaskType_Id_seq" OWNER TO postgres;
+ALTER TABLE public."TaskType_Id_seq" OWNER TO fiber_pim_dev;
 
 --
 -- TOC entry 3624 (class 0 OID 0)
