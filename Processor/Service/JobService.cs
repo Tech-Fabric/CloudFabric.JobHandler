@@ -127,8 +127,8 @@ public class JobService : IJobService
     public IEnumerable<JobProcess> GetAllProcesses() =>
         _jobProcessRepository.GetAll();
 
-    public IEnumerable<Job> GetListJobsByStatusId(int jobStatusId, int jobTypeId) =>
-        _jobRepository.Search(new Dictionary<string, object> { { nameof(Job.JobStatusId), jobStatusId }, { nameof(Job.JobTypeId), jobTypeId } });
+    public IEnumerable<Job> GetListJobsByStatusId(int jobStatusId, int jobTypeId, int? rowCount) =>
+        _jobRepository.SearchWithLimit(new Dictionary<string, object> { { nameof(Job.JobStatusId), jobStatusId }, { nameof(Job.JobTypeId), jobTypeId } }, rowCount);
 
     public void UpdateJobStatus(Guid jobId, int newJobStatusId) =>
         _jobRepository.UpdateById(jobId, new Dictionary<string, object> { { nameof(Job.JobStatusId), newJobStatusId } });

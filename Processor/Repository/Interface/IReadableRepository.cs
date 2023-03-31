@@ -11,4 +11,5 @@ public interface IReadableRepository<T>
     IEnumerable<T> GetAll();
     T LoadAndReplace(object id, Dictionary<string, object>? updateFields);
     IEnumerable<T> Search(Dictionary<string, object> parameters);
+    IEnumerable<T> SearchWithLimit(Dictionary<string, object> parameters, int? recordCount);
 }

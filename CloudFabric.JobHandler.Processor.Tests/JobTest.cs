@@ -37,7 +37,7 @@ public class JobTest
         var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
-        var jobs = _jobService.GetListJobsByStatusId((int)JobStatusEnum.Ready, 1);
+        var jobs = _jobService.GetListJobsByStatusId((int)JobStatusEnum.Ready, 1, null);
 
         // Assert
         Assert.Contains(jobs, item => item.Id == job.Id);
@@ -79,9 +79,24 @@ public class JobTest
         _jobService.UpdateJobStatus(job.Id, (int)JobStatusEnum.InProgress);
 
         // Assert
-        var jobs = _jobService.GetListJobsByStatusId((int)JobStatusEnum.InProgress, 1);
+        var jobs = _jobService.GetListJobsByStatusId((int)JobStatusEnum.InProgress, 1, null);
         Assert.Contains(jobs, item => item.Id == job.Id);
     }
+
+    [Fact]
+    public void CreateAndCheckJobsCount()
+    {
+        // Arrange
+        _jobService.CreateJob(1, string.Empty, _tenantId);
+        _jobService.CreateJob(1, string.Empty, _tenantId);
+
+        // Act
+        var jobs = _jobService.GetListJobsByStatusId((int)JobStatusEnum.Ready, 1, 1);
+
+        // Assert
+        Assert.Single(jobs);
+    }
+
 
     [Fact]
     public void CreateAndDeleteNewJob()

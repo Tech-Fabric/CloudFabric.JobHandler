@@ -7,6 +7,7 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using CloudFabric.JobHandler.Processor.Model.Settings;
+using System.Text;
 
 namespace CloudFabric.JobHandler.Processor.Repository;
 
@@ -65,15 +66,34 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
     {
         using var connection = GetConnection();
         var dynamicParams = new DynamicParameters();
-        var sql = $"{_selectString} where 1 = 1 ";
+        StringBuilder sqlBuilder = GetSearchQuery(parameters, dynamicParams, null);
+
+        return connection.Query<T>(sqlBuilder.ToString(), dynamicParams);
+    }
+
+    public IEnumerable<T> SearchWithLimit(Dictionary<string, object> parameters, int? recordCount)
+    {
+        using var connection = GetConnection();
+        var dynamicParams = new DynamicParameters();
+        StringBuilder sqlBuilder = GetSearchQuery(parameters, dynamicParams, recordCount);
+        
+        return connection.Query<T>(sqlBuilder.ToString(), dynamicParams);
+    }
+
+    private StringBuilder GetSearchQuery(Dictionary<string, object> parameters, DynamicParameters dynamicParams, int? recordCount)
+    {
+        StringBuilder sqlBuilder = new StringBuilder($"{_selectString} where 1 = 1 ");
 
         foreach (var p in parameters)
         {
-            sql += $" and \"{p.Key}\" = @{p.Key}";
+            sqlBuilder.Append($" and \"{p.Key}\" = @{p.Key}");
             dynamicParams.Add(p.Key, p.Value);
         }
 
-        return connection.Query<T>(sql, dynamicParams);
+        if (recordCount != null)
+            sqlBuilder.Append($" limit {recordCount}");
+
+        return sqlBuilder;
     }
 }
 

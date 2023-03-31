@@ -19,7 +19,7 @@ public interface IJobService
     IEnumerable<Job> GetListJobsByTenantId(Guid tenantId);
     IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int jobStatusId);
 
-    IEnumerable<Job> GetListJobsByStatusId(int jobStatusId, int jobTypeId);
+    IEnumerable<Job> GetListJobsByStatusId(int jobStatusId, int jobTypeId, int? rowCount);
 
     IEnumerable<Job> GetAllJobs();
 
