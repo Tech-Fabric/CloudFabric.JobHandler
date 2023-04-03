@@ -39,10 +39,10 @@ RUN echo "local   all   all               md5" >> /etc/postgresql/13/main/pg_hba
 
 RUN echo "listen_addresses='*'" >> /etc/postgresql/13/main/postgresql.conf
 RUN service postgresql start \
-    && psql --command "CREATE ROLE cloudfabric_eventsourcing_test WITH CREATEDB NOSUPERUSER NOCREATEROLE INHERIT NOREPLICATION CONNECTION LIMIT -1 LOGIN PASSWORD 'cloudfabric_eventsourcing_test';" \
-    && psql --command "DROP DATABASE IF EXISTS cloudfabric_eventsourcing_test;" \
-    && psql --command "CREATE DATABASE cloudfabric_eventsourcing_test WITH OWNER = cloudfabric_eventsourcing_test ENCODING = 'UTF8' CONNECTION LIMIT = -1;" \
-    && psql --command "GRANT ALL ON DATABASE cloudfabric_eventsourcing_test TO postgres;"
+    && psql --command "CREATE ROLE fiber_pim_dev WITH CREATEDB NOSUPERUSER NOCREATEROLE INHERIT NOREPLICATION CONNECTION LIMIT -1 LOGIN PASSWORD 'fiber_pim_dev';" \
+    && psql --command "DROP DATABASE IF EXISTS cloudfabric_fiber_task_test;" \
+    && psql --command "CREATE DATABASE cloudfabric_fiber_task_test WITH OWNER = fiber_pim_dev ENCODING = 'UTF8' CONNECTION LIMIT = -1;" \
+    && psql --command "GRANT ALL ON DATABASE cloudfabric_fiber_task_test TO postgres;"
 #---------------------------------------------------------------------
 # /Test database setup
 #---------------------------------------------------------------------
