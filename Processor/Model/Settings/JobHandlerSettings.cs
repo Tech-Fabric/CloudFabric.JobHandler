@@ -1,11 +1,8 @@
-﻿using System;
-namespace CloudFabric.JobHandler.Processor.Model.Settings
+﻿namespace CloudFabric.JobHandler.Processor.Model.Settings;
+
+public class JobHandlerSettings
 {
-	public class JobHandlerSettings
-	{
-		public const string Position = "JobHandlerSettings";
+    public const string Position = "JobHandlerSettings";
 
-        public string? ConnectionString { get; set; }
-	}
+    public string? ConnectionString { get; set; }
 }
-
