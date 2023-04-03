@@ -8,21 +8,19 @@ using CloudFabric.JobHandler.Processor.Service.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CloudFabric.JobHandler.Processor.Extension
-{
-	public static class JobHandlerExtension
-	{
-        public static IServiceCollection AddJobHandler(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddTransient<IEditableRepository<Job>, EditableRepositoryPostgres<Job>>();
-            services.AddTransient<IEditableRepository<JobProcess>, EditableRepositoryPostgres<JobProcess>>();
-            services.AddTransient<IEditableRepository<JobCompleted>, EditableRepositoryPostgres<JobCompleted>>();
-            services.AddTransient<IReadableRepository<JobType>, ReadableRepositoryPostgres<JobType>>();
-            services.AddScoped<IJobService, JobService>();
-            services.AddOptions<JobHandlerSettings>().Bind(configuration.GetSection(JobHandlerSettings.Position));
+namespace CloudFabric.JobHandler.Processor.Extension;
 
-            return services;
-        }
+public static class JobHandlerExtension
+{
+    public static IServiceCollection AddJobHandler(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddTransient<IEditableRepository<Job>, EditableRepositoryPostgres<Job>>();
+        services.AddTransient<IEditableRepository<JobProcess>, EditableRepositoryPostgres<JobProcess>>();
+        services.AddTransient<IEditableRepository<JobCompleted>, EditableRepositoryPostgres<JobCompleted>>();
+        services.AddTransient<IReadableRepository<JobType>, ReadableRepositoryPostgres<JobType>>();
+        services.AddScoped<IJobService, JobService>();
+        services.AddOptions<JobHandlerSettings>().Bind(configuration.GetSection(JobHandlerSettings.Position));
+
+        return services;
     }
 }
-
