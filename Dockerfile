@@ -96,7 +96,7 @@ RUN if [ -n "$SONAR_TOKEN" ] && [ -n "$PULLREQUEST_TARGET_BRANCH" ] ; then echo 
 
 USER postgres
 RUN service postgresql start && \
-    psql -command "\i /src/Processor/Db/JobDb.sql"
+    psql -U "postgres" -d "cloudfabric_fiber_task_test" -a -f "/src/Processor/Db/JobDb.sql"
 
 USER root
 
