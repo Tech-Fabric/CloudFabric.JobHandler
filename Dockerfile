@@ -113,6 +113,14 @@ RUN reportgenerator "-reports:/artifacts/tests/*/coverage.cobertura.xml" -target
 # End Sonar Scanner
 RUN if [ -n "$SONAR_TOKEN" ] ; then dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN" ; fi
 
+ARG PACKAGE_VERSION
+
+RUN sed -i "s|<Version>.*</Version>|<Version>$PACKAGE_VERSION</Version>|g" /src/Processor/CloudFabric.JobHandler.Processor.csproj && \
+    dotnet pack /src/Processor/CloudFabric.JobHandler.Processor.csproj -o /artifacts/nugets -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg && \
+
+ARG NUGET_API_KEY
+RUN if [ -n "$NUGET_API_KEY" ] ; then dotnet nuget push /artifacts/nugets/CloudFabric.JobHandler.$PACKAGE_VERSION.nupkg --skip-duplicate -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json ; fi
+
 #---------------------------------------------------------------------
 # /Build artifacts
 #---------------------------------------------------------------------
