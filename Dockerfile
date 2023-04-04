@@ -5,7 +5,6 @@ RUN apt-get update
 #---------------------------------------------------------------------
 # Tools setup
 #---------------------------------------------------------------------
-RUN dotnet tool install --global dotnet-ef
 RUN dotnet tool install --global coverlet.console
 RUN dotnet tool install --global dotnet-reportgenerator-globaltool
 
@@ -95,6 +94,11 @@ RUN if [ -n "$SONAR_TOKEN" ] && [ -n "$PULLREQUEST_TARGET_BRANCH" ] ; then echo 
   /d:sonar.branch.name="$BRANCH_NAME" \
   /d:sonar.cs.opencover.reportsPaths=/artifacts/tests/*/coverage.opencover.xml ; fi
 
+USER postgres
+RUN service postgresql start && \
+    psql -command "\i /src/Processor/Db/JobDb.sql"
+
+USER root
 
 RUN service postgresql start && sleep 20 && \
     dotnet test /src/CloudFabric.JobHandler.Processor.Tests/CloudFabric.JobHandler.Processor.Tests.csproj --logger trx --results-directory /artifacts/tests --configuration Release --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=json,cobertura,lcov,teamcity,opencover

@@ -35,4 +35,9 @@
     <Folder Include="Extension\" />
     <Folder Include="Model\Settings\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Dockerfile">
+      <Link>Dockerfile</Link>
+    </None>
+  </ItemGroup>
 </Project>
