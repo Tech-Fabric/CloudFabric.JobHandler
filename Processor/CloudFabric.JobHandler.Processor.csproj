@@ -17,26 +17,6 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Model\" />
-    <None Remove="Repository\" />
-    <None Remove="Repository\Interface\" />
-    <None Remove="Service\" />
-    <None Remove="Service\Interface\" />
-    <None Remove="Enum\" />
-    <None Remove="Extension\" />
-    <None Remove="Model\Settings\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="Repository\" />
-    <Folder Include="Repository\Interface\" />
-    <Folder Include="Service\" />
-    <Folder Include="Service\Interface\" />
-    <Folder Include="Enum\" />
-    <Folder Include="Extension\" />
-    <Folder Include="Model\Settings\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\Dockerfile">
       <Link>Dockerfile</Link>
     </None>
