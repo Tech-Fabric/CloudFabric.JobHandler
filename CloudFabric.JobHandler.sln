@@ -1,11 +1,11 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1705.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudFabric.JobHandler.Processor", "CloudFabric.JobHandler.Processor.csproj", "{EBF6A92C-7835-49F4-89E6-EE5289EE5016}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudFabric.JobHandler.Processor", "Processor\CloudFabric.JobHandler.Processor.csproj", "{EBF6A92C-7835-49F4-89E6-EE5289EE5016}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudFabric.JobHandler.Processor.Tests", "..\CloudFabric.JobHandler.Processor.Tests\CloudFabric.JobHandler.Processor.Tests.csproj", "{9AFF8102-02C7-4C50-ABCB-A54140F463A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudFabric.JobHandler.Processor.Tests", "CloudFabric.JobHandler.Processor.Tests\CloudFabric.JobHandler.Processor.Tests.csproj", "{9AFF8102-02C7-4C50-ABCB-A54140F463A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
