@@ -22,7 +22,7 @@ public class Startup
             .Build();
     }
 
-    public void ConfigureServices(IServiceCollection services)
+    public static void ConfigureServices(IServiceCollection services)
     {
         var configuration = GetConfiguration();
         services.AddSingleton<IConfiguration>(configuration);
