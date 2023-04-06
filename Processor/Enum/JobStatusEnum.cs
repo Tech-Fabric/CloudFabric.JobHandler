@@ -1,7 +1,7 @@
 ﻿using System;
 namespace CloudFabric.JobHandler.Processor.Enum;
 
-public enum JobStatusEnum
+public enum JobStatuses
 {
     Ready = 0,
     InProgress = 10,

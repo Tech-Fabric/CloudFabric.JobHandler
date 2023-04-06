@@ -37,7 +37,7 @@ public class JobTest
         var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
-        var jobs = _jobService.GetListJobsByStatusId((int)JobStatusEnum.Ready, 1, null);
+        var jobs = _jobService.GetListJobsByStatusId((int)JobStatuses.Ready, 1, null);
 
         // Assert
         Assert.Contains(jobs, item => item.Id == job.Id);
@@ -63,7 +63,7 @@ public class JobTest
         var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
-        var jobs = _jobService.GetListJobsByTenantId(_tenantId, (int)JobStatusEnum.Ready);
+        var jobs = _jobService.GetListJobsByTenantId(_tenantId, (int)JobStatuses.Ready);
 
         // Assert
         Assert.Contains(jobs, item => item.Id == job.Id);
@@ -76,10 +76,10 @@ public class JobTest
         var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
-        _jobService.UpdateJobStatus(job.Id, (int)JobStatusEnum.InProgress);
+        _jobService.UpdateJobStatus(job.Id, (int)JobStatuses.InProgress);
 
         // Assert
-        var jobs = _jobService.GetListJobsByStatusId((int)JobStatusEnum.InProgress, 1, null);
+        var jobs = _jobService.GetListJobsByStatusId((int)JobStatuses.InProgress, 1, null);
         Assert.Contains(jobs, item => item.Id == job.Id);
     }
 
@@ -91,7 +91,7 @@ public class JobTest
         _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
-        var jobs = _jobService.GetListJobsByStatusId((int)JobStatusEnum.Ready, 1, 1);
+        var jobs = _jobService.GetListJobsByStatusId((int)JobStatuses.Ready, 1, 1);
 
         // Assert
         Assert.Single(jobs);
@@ -123,7 +123,7 @@ public class JobTest
         // Assert
         Assert.NotNull(process);
         var processes = _jobService.GetAllProcesses();
-        Assert.Contains(processes, item => item.Id == process?.Id && item.JobStatusId == (int)JobStatusEnum.InProgress);
+        Assert.Contains(processes, item => item.Id == process?.Id && item.JobStatusId == (int)JobStatuses.InProgress);
     }
 
     [Fact]
@@ -151,11 +151,11 @@ public class JobTest
         Assert.NotNull(process);
 
         Guid procId = process != null ? process.Id : Guid.Empty;
-        _jobService.UpdateProcessStatus(procId, (int)JobStatusEnum.Success);
+        _jobService.UpdateProcessStatus(procId, (int)JobStatuses.Success);
 
         // Assert
         var processes = _jobService.GetAllProcesses();
-        Assert.Contains(processes, item => item.Id == procId && item.JobStatusId == (int)JobStatusEnum.Success);
+        Assert.Contains(processes, item => item.Id == procId && item.JobStatusId == (int)JobStatuses.Success);
     }
 
     [Fact]
@@ -178,7 +178,7 @@ public class JobTest
     }
 
     [Theory]
-    [InlineData((int)JobStatusEnum.Success)]
+    [InlineData((int)JobStatuses.Success)]
     public void CreateAndCompleteJob(int statusId)
     {
         // Arrange
@@ -208,7 +208,7 @@ public class JobTest
     }
 
     [Theory]
-    [InlineData((int)JobStatusEnum.Failed)]
+    [InlineData((int)JobStatuses.Failed)]
     public void CreateAndFailedJob(int statusId)
     {
         string errorMsg = "Something wrong";

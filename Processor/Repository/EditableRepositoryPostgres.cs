@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace CloudFabric.JobHandler.Processor.Repository;
 
-public class EditableRepositoryPostgres<T>: ReadableRepositoryPostgres<T>, IEditableRepository<T>
+public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEditableRepository<T>
 {
     private readonly string _tableName;
 
@@ -21,16 +21,16 @@ public class EditableRepositoryPostgres<T>: ReadableRepositoryPostgres<T>, IEdit
 
 
     public EditableRepositoryPostgres(IOptions<JobHandlerSettings> settings) : base(settings)
-	{
+    {
         _tableName = $"{typeof(T).Name}";
     }
 
     public virtual Guid Create(T entity)
     {
-        var insertQuery = GenerateInsertQuery(true);
+        var insertQuery = GenerateInsertQuery();
 
         using var connection = GetConnection();
-     
+
         return connection.QuerySingle<Guid>(insertQuery, entity);
     }
 
@@ -56,9 +56,9 @@ public class EditableRepositoryPostgres<T>: ReadableRepositoryPostgres<T>, IEdit
         connection.Execute(updateQuery, entity);
     }
 
-    public void UpdateById(Guid id, Dictionary<string, object>? updateFields)
+    public void UpdateById(Guid uuid, Dictionary<string, object>? updateFields)
     {
-        var entity = LoadAndReplace(id, updateFields);
+        var entity = LoadAndReplace(uuid, updateFields);
         Update(entity);
     }
 
@@ -70,7 +70,7 @@ public class EditableRepositoryPostgres<T>: ReadableRepositoryPostgres<T>, IEdit
         connection.Execute(deleteQuery, entity);
     }
 
-    private string GenerateInsertQuery(bool returnIdentity = false)
+    private string GenerateInsertQuery()
     {
         var insertQuery = new StringBuilder($"insert into \"{_tableName}\" ");
 
@@ -82,9 +82,9 @@ public class EditableRepositoryPostgres<T>: ReadableRepositoryPostgres<T>, IEdit
             insertQuery.Append((string?)$"\"{prop}\",");
         });
 
-            insertQuery
-                .Remove(insertQuery.Length - 1, 1)
-                .Append(") values (");
+        insertQuery
+            .Remove(insertQuery.Length - 1, 1)
+            .Append(") values (");
 
         properties.ForEach(prop =>
         {
@@ -126,12 +126,11 @@ public class EditableRepositoryPostgres<T>: ReadableRepositoryPostgres<T>, IEdit
             .Select(p => p.Name)
             .ToList();
 
-    public void DeleteById(Guid id)
+    public void DeleteById(Guid uuid)
     {
-        var deleteQuery = GenerateDeleteQuery().Replace($"@{KeyField}", $"\'{id.ToString()}\'");
+        var deleteQuery = GenerateDeleteQuery().Replace($"@{KeyField}", $"\'{uuid.ToString()}\'");
 
         using var connection = GetConnection();
         connection.Execute(deleteQuery);
     }
 }
-

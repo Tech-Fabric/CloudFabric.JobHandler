@@ -32,7 +32,7 @@ public class JobService : IJobService
             Id = Guid.NewGuid(),
             CreatorId = 0,
             Created = DateTime.Now,
-            JobStatusId = (int)JobStatusEnum.Ready,
+            JobStatusId = (int)JobStatuses.Ready,
             JobTypeId = jobTypeId,
             Parameters = parameters,
             TenantId = tenantId
@@ -50,7 +50,7 @@ public class JobService : IJobService
             {
                 Id = Guid.NewGuid(),
                 JobId = jobId,
-                JobStatusId = (int)JobStatusEnum.InProgress,
+                JobStatusId = (int)JobStatuses.InProgress,
                 Progress = 0,
                 LastProcess = DateTime.Now
             };
@@ -59,7 +59,7 @@ public class JobService : IJobService
             {
                 _jobProcessRepository.Insert(jobProcess);
 
-                UpdateJobStatus(jobId, (int)JobStatusEnum.InProgress);
+                UpdateJobStatus(jobId, (int)JobStatuses.InProgress);
                 trx.Complete();
                 return jobProcess;
             }
@@ -82,7 +82,7 @@ public class JobService : IJobService
         {
             Id = Guid.NewGuid(),
             JobId = jobId,
-            JobStatusId = (int)JobStatusEnum.Failed,
+            JobStatusId = (int)JobStatuses.Failed,
             Completed = DateTime.Now,
             ErrorMessage = errorMessage
         };
@@ -91,9 +91,9 @@ public class JobService : IJobService
         {
             _jobCompleteRepository.Insert(jobCompleted);
 
-            UpdateProcessStatus(GetJobProcessByJobId(jobId).Id, (int)JobStatusEnum.Failed);
+            UpdateProcessStatus(GetJobProcessByJobId(jobId).Id, (int)JobStatuses.Failed);
 
-            UpdateJobStatus(jobId, (int)JobStatusEnum.Failed);
+            UpdateJobStatus(jobId, (int)JobStatuses.Failed);
 
             trx.Complete();
         }
@@ -105,7 +105,7 @@ public class JobService : IJobService
         {
             Id = Guid.NewGuid(),
             JobId = jobId,
-            JobStatusId = (int)JobStatusEnum.Success,
+            JobStatusId = (int)JobStatuses.Success,
             Completed = DateTime.Now
         };
 
@@ -113,9 +113,9 @@ public class JobService : IJobService
         {
             _jobCompleteRepository.Insert(jobCompleted);
 
-            UpdateProcessStatus(GetJobProcessByJobId(jobId).Id, (int)JobStatusEnum.Success);
+            UpdateProcessStatus(GetJobProcessByJobId(jobId).Id, (int)JobStatuses.Success);
 
-            UpdateJobStatus(jobId, (int)JobStatusEnum.Success);
+            UpdateJobStatus(jobId, (int)JobStatuses.Success);
 
             trx.Complete();
         }

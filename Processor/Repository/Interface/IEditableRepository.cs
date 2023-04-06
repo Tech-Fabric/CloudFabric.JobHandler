@@ -11,4 +11,3 @@ public interface IEditableRepository<T>: IReadableRepository<T>
     void Delete(T entity);
     void DeleteById(Guid uuid);
 }
-

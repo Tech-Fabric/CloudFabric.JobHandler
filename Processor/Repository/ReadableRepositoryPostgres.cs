@@ -13,7 +13,6 @@ namespace CloudFabric.JobHandler.Processor.Repository;
 
 public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
 {
-    private readonly string _tableName;
     private readonly string _selectString;
     private readonly JobHandlerSettings _settings;
 
@@ -26,7 +25,8 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
     public ReadableRepositoryPostgres(IOptions<JobHandlerSettings> settings)
     {
         _settings = settings.Value;
-        _tableName = $"{typeof(T).Name}";
+
+        string _tableName = $"{typeof(T).Name}";
         _selectString = $"select * from \"{_tableName}\"";
     }
 
