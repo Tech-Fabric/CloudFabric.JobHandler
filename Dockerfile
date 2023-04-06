@@ -38,10 +38,10 @@ RUN echo "local   all   all               md5" >> /etc/postgresql/13/main/pg_hba
 
 RUN echo "listen_addresses='*'" >> /etc/postgresql/13/main/postgresql.conf
 RUN service postgresql start \
-    && psql --command "CREATE ROLE fiber_pim_dev WITH CREATEDB NOSUPERUSER NOCREATEROLE INHERIT NOREPLICATION CONNECTION LIMIT -1 LOGIN PASSWORD 'fiber_pim_dev';" \
-    && psql --command "DROP DATABASE IF EXISTS cloudfabric_fiber_task_test;" \
-    && psql --command "CREATE DATABASE cloudfabric_fiber_task_test WITH OWNER = fiber_pim_dev ENCODING = 'UTF8' CONNECTION LIMIT = -1;" \
-    && psql --command "GRANT ALL ON DATABASE cloudfabric_fiber_task_test TO postgres;"
+    && psql --command "CREATE ROLE cloudfabric_job_dev WITH CREATEDB NOSUPERUSER NOCREATEROLE INHERIT NOREPLICATION CONNECTION LIMIT -1 LOGIN PASSWORD 'cloudfabric_job_dev';" \
+    && psql --command "DROP DATABASE IF EXISTS cloudfabric_jobs_dev;" \
+    && psql --command "CREATE DATABASE cloudfabric_jobs_dev WITH OWNER = cloudfabric_job_dev ENCODING = 'UTF8' CONNECTION LIMIT = -1;" \
+    && psql --command "GRANT ALL ON DATABASE cloudfabric_jobs_dev TO postgres;"
 #---------------------------------------------------------------------
 # /Test database setup
 #---------------------------------------------------------------------
@@ -96,7 +96,7 @@ RUN if [ -n "$SONAR_TOKEN" ] && [ -n "$PULLREQUEST_TARGET_BRANCH" ] ; then echo 
 
 USER postgres
 RUN service postgresql start && \
-    psql -U "postgres" -d "cloudfabric_fiber_task_test" -a -f "/src/Processor/Db/JobDb.sql"
+    psql -U "postgres" -d "cloudfabric_jobs_dev" -a -f "/src/Processor/Db/JobDb.sql"
 
 USER root
 

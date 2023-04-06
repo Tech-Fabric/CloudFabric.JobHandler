@@ -5,8 +5,6 @@
 -- Dumped from database version 15.2
 -- Dumped by pg_dump version 15.2
 
--- Started on 2023-03-07 07:43:08 EET
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -24,7 +22,7 @@ SET default_table_access_method = heap;
 
 --
 -- TOC entry 216 (class 1259 OID 16437)
--- Name: Job; Type: TABLE; Schema: public; Owner: postgres
+-- Name: Job; Type: TABLE; Schema: public; Owner: cloudfabric_job_dev
 --
 
 CREATE TABLE public."Job" (
@@ -38,11 +36,11 @@ CREATE TABLE public."Job" (
 );
 
 
-ALTER TABLE public."Job" OWNER TO fiber_pim_dev;
+ALTER TABLE public."Job" OWNER TO cloudfabric_job_dev;
 
 --
 -- TOC entry 218 (class 1259 OID 16447)
--- Name: JobCompleted; Type: TABLE; Schema: public; Owner: postgres
+-- Name: JobCompleted; Type: TABLE; Schema: public; Owner: cloudfabric_job_dev
 --
 
 CREATE TABLE public."JobCompleted" (
@@ -54,11 +52,11 @@ CREATE TABLE public."JobCompleted" (
 );
 
 
-ALTER TABLE public."JobCompleted" OWNER TO fiber_pim_dev;
+ALTER TABLE public."JobCompleted" OWNER TO cloudfabric_job_dev;
 
 --
 -- TOC entry 217 (class 1259 OID 16442)
--- Name: JobProcess; Type: TABLE; Schema: public; Owner: postgres
+-- Name: JobProcess; Type: TABLE; Schema: public; Owner: cloudfabric_job_dev
 --
 
 CREATE TABLE public."JobProcess" (
@@ -70,11 +68,11 @@ CREATE TABLE public."JobProcess" (
 );
 
 
-ALTER TABLE public."JobProcess" OWNER TO fiber_pim_dev;
+ALTER TABLE public."JobProcess" OWNER TO cloudfabric_job_dev;
 
 --
 -- TOC entry 219 (class 1259 OID 16450)
--- Name: JobStatus; Type: TABLE; Schema: public; Owner: postgres
+-- Name: JobStatus; Type: TABLE; Schema: public; Owner: cloudfabric_job_dev
 --
 
 CREATE TABLE public."JobStatus" (
@@ -83,11 +81,11 @@ CREATE TABLE public."JobStatus" (
 );
 
 
-ALTER TABLE public."JobStatus" OWNER TO fiber_pim_dev;
+ALTER TABLE public."JobStatus" OWNER TO cloudfabric_job_dev;
 
 --
 -- TOC entry 215 (class 1259 OID 16429)
--- Name: JobType; Type: TABLE; Schema: public; Owner: postgres
+-- Name: JobType; Type: TABLE; Schema: public; Owner: cloudfabric_job_dev
 --
 
 CREATE TABLE public."JobType" (
@@ -97,11 +95,11 @@ CREATE TABLE public."JobType" (
 );
 
 
-ALTER TABLE public."JobType" OWNER TO fiber_pim_dev;
+ALTER TABLE public."JobType" OWNER TO cloudfabric_job_dev;
 
 --
 -- TOC entry 214 (class 1259 OID 16428)
--- Name: TaskType_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: TaskType_Id_seq; Type: SEQUENCE; Schema: public; Owner: cloudfabric_job_dev
 --
 
 CREATE SEQUENCE public."TaskType_Id_seq"
@@ -113,12 +111,12 @@ CREATE SEQUENCE public."TaskType_Id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."TaskType_Id_seq" OWNER TO fiber_pim_dev;
+ALTER TABLE public."TaskType_Id_seq" OWNER TO cloudfabric_job_dev;
 
 --
 -- TOC entry 3624 (class 0 OID 0)
 -- Dependencies: 214
--- Name: TaskType_Id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: TaskType_Id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cloudfabric_job_dev
 --
 
 ALTER SEQUENCE public."TaskType_Id_seq" OWNED BY public."JobType"."Id";
@@ -126,7 +124,7 @@ ALTER SEQUENCE public."TaskType_Id_seq" OWNED BY public."JobType"."Id";
 
 --
 -- TOC entry 3455 (class 2604 OID 16432)
--- Name: JobType Id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: JobType Id; Type: DEFAULT; Schema: public; Owner: cloudfabric_job_dev
 --
 
 ALTER TABLE ONLY public."JobType" ALTER COLUMN "Id" SET DEFAULT nextval('public."TaskType_Id_seq"'::regclass);
@@ -135,7 +133,7 @@ ALTER TABLE ONLY public."JobType" ALTER COLUMN "Id" SET DEFAULT nextval('public.
 --
 -- TOC entry 3618 (class 0 OID 16450)
 -- Dependencies: 219
--- Data for Name: JobStatus; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: JobStatus; Type: TABLE DATA; Schema: public; Owner: cloudfabric_job_dev
 --
 
 COPY public."JobStatus" ("Id", "Name") FROM stdin;
@@ -149,24 +147,22 @@ COPY public."JobStatus" ("Id", "Name") FROM stdin;
 --
 -- TOC entry 3614 (class 0 OID 16429)
 -- Dependencies: 215
--- Data for Name: JobType; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: JobType; Type: TABLE DATA; Schema: public; Owner: cloudfabric_job_dev
 --
 
 COPY public."JobType" ("Id", "Name", "AssemblyName") FROM stdin;
-1	Test	Test
+1	RebuildIndex	
 \.
 
 
 --
 -- TOC entry 3625 (class 0 OID 0)
 -- Dependencies: 214
--- Name: TaskType_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: TaskType_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: cloudfabric_job_dev
 --
 
 SELECT pg_catalog.setval('public."TaskType_Id_seq"', 1, false);
 
-
--- Completed on 2023-03-07 07:43:09 EET
 
 --
 -- PostgreSQL database dump complete
