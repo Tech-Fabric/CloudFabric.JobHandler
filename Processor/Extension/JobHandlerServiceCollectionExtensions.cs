@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudFabric.JobHandler.Processor.Extension;
 
-public static class JobHandlerExtension
+public static class JobHandlerServiceCollectionExtensions
 {
     public static IServiceCollection AddJobHandler(this IServiceCollection services, IConfiguration configuration)
     {
