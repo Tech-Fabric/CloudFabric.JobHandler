@@ -96,10 +96,9 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
         var updateQuery = new StringBuilder($"update \"{_tableName}\" set ");
         var properties = GenerateListOfProperties(Properties);
 
-        updateQuery.AppendJoin(" , ", properties.Where(p => p != _keyField).Select(prop => $"{prop}=@{prop}"));
+        updateQuery.AppendJoin(", ", properties.Where(p => p != _keyField).Select(prop => $"{prop}=@{prop}"));
 
-        //remove last comma
-        updateQuery.Append($" where {_keyField} = @{_keyField} ");
+        updateQuery.Append($" where {_keyField}=@{_keyField}");
 
         return updateQuery.ToString();
     }
