@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using CloudFabric.JobHandler.Processor.Model.Settings;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace CloudFabric.JobHandler.Processor.Repository;
 
@@ -16,16 +17,24 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
     private readonly string _selectString;
     private readonly JobHandlerSettings _settings;
 
-    public string KeyField { get; set; } = "Id";
+    protected string KeyField { get; set; } 
 
     protected NpgsqlConnection GetConnection() =>
         new NpgsqlConnection(_settings.ConnectionString);
 
+    private PropertyInfo? GetIdProperty(Type type)
+    {
+        var tp = type.GetProperties().Where(p => p.GetCustomAttributes(true).Any(attr => attr.GetType().Name == typeof(KeyAttribute).Name)).ToList();
+        return tp.Any() ? tp.FirstOrDefault() : type.GetProperties().FirstOrDefault(p => p.Name.Equals("Id", StringComparison.OrdinalIgnoreCase));
+    }
 
     public ReadableRepositoryPostgres(IOptions<JobHandlerSettings> settings)
     {
         _settings = settings.Value;
-
+        var keyProp = GetIdProperty(typeof(T));
+        if (keyProp == null)
+            throw new Exception($"Type {typeof(T).Name} doesn't containt Key attribute od Id column");
+        KeyField = keyProp.Name;
         string _tableName = $"{typeof(T).Name}";
         _selectString = $"select * from \"{_tableName}\"";
     }
@@ -33,7 +42,8 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
     public T Get(object id)
     {
         using var conn = GetConnection();
-        var queryResult = conn.QueryFirst<T>($"{_selectString} where \"{KeyField}\" = @id", new { id = id });
+        var query = $"{_selectString} where \"{KeyField}\" = @id";
+        var queryResult = conn.QueryFirst<T>(query, new { id = id });
         return queryResult;
     }
 
