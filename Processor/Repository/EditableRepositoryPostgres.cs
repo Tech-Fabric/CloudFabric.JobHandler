@@ -14,6 +14,7 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
 {
     private readonly string _tableName;
     private readonly string _keyField = "Id";
+    private readonly string _whereByIdString;
 
     private static IEnumerable<PropertyInfo> EnumerableProperties => typeof(T).GetProperties()
         .Where(p => p.PropertyType != typeof(string) && p.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)));
@@ -24,6 +25,7 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
     public EditableRepositoryPostgres(IOptions<JobHandlerSettings> settings) : base(settings)
     {
         _tableName = $"{typeof(T).Name}";
+        _whereByIdString = $" where {_keyField}=@{_keyField}";
     }
 
     public virtual Guid Create(T entity)
@@ -98,13 +100,13 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
 
         updateQuery.AppendJoin(", ", properties.Where(p => p != _keyField).Select(prop => $"{prop}=@{prop}"));
 
-        updateQuery.Append($" where {_keyField}=@{_keyField}");
+        updateQuery.Append(_whereByIdString);
 
         return updateQuery.ToString();
     }
 
     private string GenerateDeleteQuery() =>
-        $" delete from \"{_tableName}\" where {_keyField} = @{_keyField} ";
+        $" delete from \"{_tableName}\" {_whereByIdString}";
 
     private static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties) =>
         listOfProperties
