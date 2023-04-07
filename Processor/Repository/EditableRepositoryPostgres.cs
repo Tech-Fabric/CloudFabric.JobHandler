@@ -105,7 +105,7 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
 
         properties.ForEach(prop =>
         {
-            if (!string.Equals(prop, KeyField, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(prop, _keyField, StringComparison.OrdinalIgnoreCase))
             {
                 updateQuery.Append($"\"{prop}\"=@{prop},");
             }
@@ -113,13 +113,13 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
 
         //remove last comma
         updateQuery.Remove(updateQuery.Length - 1, 1);
-        updateQuery.Append($" where \"{KeyField}\"=@{KeyField}");
+        updateQuery.Append($" where \"{_keyField}\"=@{_keyField}");
 
         return updateQuery.ToString();
     }
 
     private string GenerateDeleteQuery() =>
-        $"delete from \"{_tableName}\" where \"{KeyField}\"=@{KeyField}";
+        $"delete from \"{_tableName}\" where \"{_keyField}\"=@{_keyField}";
 
     private static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties) =>
         listOfProperties
@@ -128,7 +128,7 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
 
     public void DeleteById(Guid uuid)
     {
-        var deleteQuery = GenerateDeleteQuery().Replace($"@{KeyField}", $"\'{uuid.ToString()}\'");
+        var deleteQuery = GenerateDeleteQuery().Replace($"@{_keyField}", $"\'{uuid.ToString()}\'");
 
         using var connection = GetConnection();
         connection.Execute(deleteQuery);

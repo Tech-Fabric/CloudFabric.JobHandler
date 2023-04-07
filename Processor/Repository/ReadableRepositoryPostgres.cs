@@ -17,7 +17,7 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
     private readonly string _selectString;
     private readonly JobHandlerSettings _settings;
 
-    protected string KeyField { get; set; } 
+    protected readonly string _keyField;
 
     protected NpgsqlConnection GetConnection() =>
         new NpgsqlConnection(_settings.ConnectionString);
@@ -33,8 +33,8 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
         _settings = settings.Value;
         var keyProp = GetIdProperty(typeof(T));
         if (keyProp == null)
-            throw new Exception($"Type {typeof(T).Name} doesn't containt Key attribute od Id column");
-        KeyField = keyProp.Name;
+            throw new KeyNotFoundException($"Type {typeof(T).Name} doesn't containt Key attribute od Id column");
+        _keyField = keyProp.Name;
         string _tableName = $"{typeof(T).Name}";
         _selectString = $"select * from \"{_tableName}\"";
     }
@@ -42,7 +42,7 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
     public T Get(object id)
     {
         using var conn = GetConnection();
-        var query = $"{_selectString} where \"{KeyField}\" = @id";
+        var query = $"{_selectString} where \"{_keyField}\" = @id";
         var queryResult = conn.QueryFirst<T>(query, new { id = id });
         return queryResult;
     }
