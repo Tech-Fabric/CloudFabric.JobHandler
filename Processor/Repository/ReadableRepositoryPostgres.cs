@@ -17,8 +17,6 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
     private readonly string _selectString;
     private readonly JobHandlerSettings _settings;
 
-    private readonly string KeyField = "Id";
-
     protected NpgsqlConnection GetConnection() =>
         new NpgsqlConnection(_settings.ConnectionString);
 
@@ -37,7 +35,7 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
             { "@id", id }
         };
         var parameters = new DynamicParameters(dictionary);
-        var query = $"{_selectString} where {KeyField} = @id";
+        var query = $"{_selectString} where Id = @id";
         var queryResult = conn.QuerySingle<T>(query, parameters);
         return queryResult;
     }
