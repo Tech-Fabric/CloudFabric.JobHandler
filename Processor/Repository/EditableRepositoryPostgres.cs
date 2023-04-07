@@ -78,23 +78,14 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
         insertQuery.Append('(');
 
         var properties = GenerateListOfProperties(Properties);
-        properties.ForEach(prop =>
-        {
-            insertQuery.Append((string?)$"\"{prop}\",");
-        });
 
-        insertQuery
-            .Remove(insertQuery.Length - 1, 1)
-            .Append(") values (");
+        insertQuery.AppendJoin(",", properties);
 
-        properties.ForEach(prop =>
-        {
-            insertQuery.Append((string?)$"(@{prop}),");
-        });
+        insertQuery.Append(") values (");
 
-        insertQuery
-            .Remove(insertQuery.Length - 1, 1)
-            .Append(')');
+        insertQuery.AppendJoin(",", properties.Select(p => $"(@{p})"));
+
+        insertQuery.Append(')');
 
         return insertQuery.ToString();
     }
@@ -104,23 +95,16 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
         var updateQuery = new StringBuilder($"update \"{_tableName}\" set ");
         var properties = GenerateListOfProperties(Properties);
 
-        properties.ForEach(prop =>
-        {
-            if (!string.Equals(prop, _keyField, StringComparison.OrdinalIgnoreCase))
-            {
-                updateQuery.Append($"\"{prop}\"=@{prop},");
-            }
-        });
+        updateQuery.AppendJoin(",", properties.Where(p => p != _keyField).Select(prop => $"{prop}=@{prop}"));
 
         //remove last comma
-        updateQuery.Remove(updateQuery.Length - 1, 1);
-        updateQuery.Append($" where \"{_keyField}\"=@{_keyField}");
+        updateQuery.Append($" where {_keyField}=@{_keyField}");
 
         return updateQuery.ToString();
     }
 
     private string GenerateDeleteQuery() =>
-        $"delete from \"{_tableName}\" where \"{_keyField}\"=@{_keyField}";
+        $"delete from \"{_tableName}\" where {_keyField}=@{_keyField}";
 
     private static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties) =>
         listOfProperties
