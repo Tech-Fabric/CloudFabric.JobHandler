@@ -13,18 +13,14 @@ namespace CloudFabric.JobHandler.Processor.Tests;
 
 public class Startup
 {
-    public IConfiguration GetConfiguration()
+    public void ConfigureServices(IServiceCollection services)
     {
-        return new ConfigurationBuilder()
+        var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables()
             .Build();
-    }
 
-    public void ConfigureServices(IServiceCollection services)
-    {
-        var configuration = GetConfiguration();
         services.AddSingleton<IConfiguration>(configuration);
         services.AddJobHandler(configuration);
     }
