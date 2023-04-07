@@ -25,7 +25,7 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
     public EditableRepositoryPostgres(IOptions<JobHandlerSettings> settings) : base(settings)
     {
         _tableName = $"{typeof(T).Name}";
-        _whereByIdString = $" where {_keyField}=@{_keyField}";
+        _whereByIdString = $" where {_keyField}=@" + $"{_keyField}";
     }
 
     public virtual Guid Create(T entity)
