@@ -15,6 +15,7 @@ namespace CloudFabric.JobHandler.Processor.Repository;
 public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
 {
     private readonly string _selectString;
+    private readonly string _getByIdString;
     private readonly JobHandlerSettings _settings;
 
     protected NpgsqlConnection GetConnection() =>
@@ -25,6 +26,7 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
         _settings = settings.Value;
         string _tableName = $"{typeof(T).Name}";
         _selectString = $"select * from \"{_tableName}\"";
+        _getByIdString = $"{_selectString} where Id = @id";
     }
 
     public T Get(object id)
@@ -35,8 +37,7 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
             { "@id", id }
         };
         var parameters = new DynamicParameters(dictionary);
-        var query = $"{_selectString} where Id = @id";
-        var queryResult = conn.QuerySingle<T>(query, parameters);
+        var queryResult = conn.QuerySingle<T>(_getByIdString, parameters);
         return queryResult;
     }
 
