@@ -13,6 +13,7 @@ namespace CloudFabric.JobHandler.Processor.Repository;
 public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEditableRepository<T>
 {
     private readonly string _tableName;
+    private readonly string _keyField = "Id";
 
     private static IEnumerable<PropertyInfo> EnumerableProperties => typeof(T).GetProperties()
         .Where(p => p.PropertyType != typeof(string) && p.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)));
