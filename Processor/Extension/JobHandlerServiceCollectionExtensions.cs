@@ -18,6 +18,7 @@ public static class JobHandlerServiceCollectionExtensions
         services.AddTransient<IEditableRepository<JobProcess>, EditableRepositoryPostgres<JobProcess>>();
         services.AddTransient<IEditableRepository<JobCompleted>, EditableRepositoryPostgres<JobCompleted>>();
         services.AddTransient<IReadableRepository<JobType>, ReadableRepositoryPostgres<JobType>>();
+        services.AddTransient<IReadableRepository<JobStatus>, ReadableRepositoryPostgres<JobStatus>>();
         services.AddScoped<IJobService, JobService>();
         services.AddOptions<JobHandlerSettings>().Bind(configuration.GetSection(JobHandlerSettings.Position));
 

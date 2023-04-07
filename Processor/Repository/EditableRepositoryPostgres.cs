@@ -30,6 +30,7 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
     {
         var insertQuery = GenerateInsertQuery();
 
+        insertQuery += $" RETURNING {_keyField};";
         using var connection = GetConnection();
 
         return connection.QuerySingle<Guid>(insertQuery, entity);
@@ -83,7 +84,7 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
 
         insertQuery.Append(") values (");
 
-        insertQuery.AppendJoin(",", properties.Select(p => $"(@{p})"));
+        insertQuery.AppendJoin(",", properties.Select(p => $"@{p}"));
 
         insertQuery.Append(')');
 

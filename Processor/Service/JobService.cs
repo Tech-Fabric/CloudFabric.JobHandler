@@ -13,16 +13,19 @@ public class JobService : IJobService
     private readonly IEditableRepository<JobProcess> _jobProcessRepository;
     private readonly IEditableRepository<JobCompleted> _jobCompleteRepository;
     private readonly IReadableRepository<JobType> _jobTypeRepository;
+    private readonly IReadableRepository<JobStatus> _jobStatusRepository;
 
     public JobService(IEditableRepository<Job> jobRepository,
         IEditableRepository<JobProcess> jobProcessRepository,
         IEditableRepository<JobCompleted> jobCompleteRepository,
-        IReadableRepository<JobType> jobTypeRepository)
+        IReadableRepository<JobType> jobTypeRepository,
+        IReadableRepository<JobStatus> jobStatusRepository)
     {
         _jobRepository = jobRepository;
         _jobProcessRepository = jobProcessRepository;
         _jobCompleteRepository = jobCompleteRepository;
         _jobTypeRepository = jobTypeRepository;
+        _jobStatusRepository = jobStatusRepository;
     }
 
     public Job CreateJob(int jobTypeId, string parameters, Guid tenantId)
@@ -40,6 +43,23 @@ public class JobService : IJobService
 
         _jobRepository.Insert(job);
         return job;
+    }
+
+    public Job CreateAndLoadJob(int jobTypeId, string parameters, Guid tenantId)
+    {
+        Job job = new Job()
+        {
+            Id = Guid.NewGuid(),
+            CreatorId = 0,
+            Created = DateTime.Now,
+            JobStatusId = (int)JobStatuses.Ready,
+            JobTypeId = jobTypeId,
+            Parameters = parameters,
+            TenantId = tenantId
+        };
+
+        var newJob = _jobRepository.CreateAndLoad(job);
+        return newJob;
     }
 
     public JobProcess? CreateJobProcess(Guid jobId)
@@ -72,6 +92,9 @@ public class JobService : IJobService
 
     public void DeleteJob(Guid jobId) =>
         _jobRepository.DeleteById(jobId);
+
+    public void DeleteJob(Job job) =>
+        _jobRepository.Delete(job);
 
     public JobProcess GetJobProcessByJobId(Guid jobId) =>
         _jobProcessRepository.Query(new Dictionary<string, object>() { { nameof(JobProcess.JobId), jobId } }, 1).First();
@@ -154,6 +177,9 @@ public class JobService : IJobService
 
     public IEnumerable<JobType> GetJobTypes() =>
         _jobTypeRepository.GetAll();
+
+    public IEnumerable<JobStatus> GetJobStatuses() =>
+        _jobStatusRepository.GetAll();
 
     public IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int? recordCount) =>
         _jobRepository.Query(new Dictionary<string, object> { { nameof(Job.TenantId), tenantId } }, recordCount);

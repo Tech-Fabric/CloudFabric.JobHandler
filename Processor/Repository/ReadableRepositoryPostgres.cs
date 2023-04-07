@@ -65,7 +65,7 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
         return entity;
     }
 
-    public IEnumerable<T> Query(Dictionary<string, object> parameters, int? recordCount = null)
+    public IEnumerable<T> Query(Dictionary<string, object> parameters, int? recordCount)
     {
         using var connection = GetConnection();
         var dynamicParams = new DynamicParameters();

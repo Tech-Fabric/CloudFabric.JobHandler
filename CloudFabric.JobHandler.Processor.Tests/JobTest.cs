@@ -102,10 +102,10 @@ public class JobTest
     public void CreateAndDeleteNewJob()
     {
         // Arrange
-        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
+        var job = _jobService.CreateAndLoadJob(1, string.Empty, _tenantId);
 
         // Act
-        _jobService.DeleteJob(job.Id);
+        _jobService.DeleteJob(job);
         var jobs = _jobService.GetAllJobs();
         // Assert
         Assert.DoesNotContain(jobs, item => item.Id == job.Id);
@@ -212,6 +212,7 @@ public class JobTest
     public void CreateAndFailedJob(int statusId)
     {
         string errorMsg = "Something wrong";
+
         // Arrange
         var job = _jobService.CreateJob(1, string.Empty, _tenantId);
         var process = _jobService.CreateJobProcess(job.Id);
@@ -239,12 +240,23 @@ public class JobTest
     }
 
     [Fact]
+    public void CheckDefaultJobStatus()
+    {
+        // Act
+        var jobStatuses = _jobService.GetJobStatuses();
+
+     
+        // Assert
+        Assert.Contains(jobStatuses, item => item.Id == (int)JobStatuses.InProgress);
+    }
+
+    [Fact]
     public void CheckDefaultJobType()
     {
         // Act
         var jobTypes = _jobService.GetJobTypes();
 
-     
+
         // Assert
         Assert.Contains(jobTypes, item => item.Id == 1);
     }
