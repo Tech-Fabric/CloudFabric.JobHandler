@@ -17,6 +17,7 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
     private readonly string _selectString;
     private readonly string _getByIdString;
     private readonly JobHandlerSettings _settings;
+    private readonly string _keyField = "Id";
 
     protected NpgsqlConnection GetConnection() =>
         new NpgsqlConnection(_settings.ConnectionString);
@@ -26,7 +27,7 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
         _settings = settings.Value;
         string _tableName = $"{typeof(T).Name}";
         _selectString = $"select * from \"{_tableName}\"";
-        _getByIdString = $"{_selectString} where Id = @id";
+        _getByIdString = $"{_selectString} where {_keyField} = @id";
     }
 
     public T Get(object id)
@@ -45,7 +46,6 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
     {
         using var connection = GetConnection();
         return connection.Query<T>(_selectString);
-
     }
 
     public T LoadAndReplace(object id, Dictionary<string, object>? updateFields)
@@ -65,16 +65,7 @@ public class ReadableRepositoryPostgres<T>: IReadableRepository<T>
         return entity;
     }
 
-    public IEnumerable<T> Search(Dictionary<string, object> parameters)
-    {
-        using var connection = GetConnection();
-        var dynamicParams = new DynamicParameters();
-        StringBuilder sqlBuilder = GetSearchQuery(parameters, dynamicParams, null);
-
-        return connection.Query<T>(sqlBuilder.ToString(), dynamicParams);
-    }
-
-    public IEnumerable<T> SearchWithLimit(Dictionary<string, object> parameters, int? recordCount)
+    public IEnumerable<T> Query(Dictionary<string, object> parameters, int? recordCount = null)
     {
         using var connection = GetConnection();
         var dynamicParams = new DynamicParameters();

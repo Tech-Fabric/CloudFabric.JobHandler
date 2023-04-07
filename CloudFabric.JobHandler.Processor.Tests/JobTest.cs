@@ -50,7 +50,7 @@ public class JobTest
         var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
-        var jobs = _jobService.GetListJobsByTenantId(_tenantId);
+        var jobs = _jobService.GetListJobsByTenantId(_tenantId, 1);
 
         // Assert
         Assert.Contains(jobs, item => item.Id == job.Id);
@@ -63,7 +63,7 @@ public class JobTest
         var job = _jobService.CreateJob(1, string.Empty, _tenantId);
 
         // Act
-        var jobs = _jobService.GetListJobsByTenantId(_tenantId, (int)JobStatuses.Ready);
+        var jobs = _jobService.GetListJobsByTenantId(_tenantId, (int)JobStatuses.Ready, 1);
 
         // Assert
         Assert.Contains(jobs, item => item.Id == job.Id);

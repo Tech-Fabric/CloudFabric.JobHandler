@@ -104,7 +104,7 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
     }
 
     private string GenerateDeleteQuery() =>
-        $"delete from \"{_tableName}\" where {_keyField} = @{_keyField} ";
+        $" delete from \"{_tableName}\" where {_keyField} = @{_keyField} ";
 
     private static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties) =>
         listOfProperties
@@ -113,7 +113,7 @@ public class EditableRepositoryPostgres<T> : ReadableRepositoryPostgres<T>, IEdi
 
     public void DeleteById(Guid uuid)
     {
-        var deleteQuery = GenerateDeleteQuery().Replace($" @{_keyField} ", $" \'{uuid.ToString()}\' ");
+        var deleteQuery = GenerateDeleteQuery().Replace($"@{_keyField}", $"\'{uuid.ToString()}\'");
 
         using var connection = GetConnection();
         connection.Execute(deleteQuery);

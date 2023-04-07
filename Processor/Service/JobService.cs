@@ -74,7 +74,7 @@ public class JobService : IJobService
         _jobRepository.DeleteById(jobId);
 
     public JobProcess GetJobProcessByJobId(Guid jobId) =>
-        _jobProcessRepository.Search(new Dictionary<string, object>() { { nameof(JobProcess.JobId), jobId } }).First();
+        _jobProcessRepository.Query(new Dictionary<string, object>() { { nameof(JobProcess.JobId), jobId } }, 1).First();
 
     public void FailJob(Guid jobId, string errorMessage)
     {
@@ -128,7 +128,7 @@ public class JobService : IJobService
         _jobProcessRepository.GetAll();
 
     public IEnumerable<Job> GetListJobsByStatusId(int jobStatusId, int jobTypeId, int? rowCount) =>
-        _jobRepository.SearchWithLimit(new Dictionary<string, object> { { nameof(Job.JobStatusId), jobStatusId }, { nameof(Job.JobTypeId), jobTypeId } }, rowCount);
+        _jobRepository.Query(new Dictionary<string, object> { { nameof(Job.JobStatusId), jobStatusId }, { nameof(Job.JobTypeId), jobTypeId } }, rowCount);
 
     public void UpdateJobStatus(Guid jobId, int newJobStatusId) =>
         _jobRepository.UpdateById(jobId, new Dictionary<string, object> { { nameof(Job.JobStatusId), newJobStatusId } });
@@ -155,10 +155,10 @@ public class JobService : IJobService
     public IEnumerable<JobType> GetJobTypes() =>
         _jobTypeRepository.GetAll();
 
-    public IEnumerable<Job> GetListJobsByTenantId(Guid tenantId) =>
-        _jobRepository.Search(new Dictionary<string, object> { { nameof(Job.TenantId), tenantId } });
+    public IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int? recordCount) =>
+        _jobRepository.Query(new Dictionary<string, object> { { nameof(Job.TenantId), tenantId } }, recordCount);
 
-    public IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int jobStatusId) =>
-        _jobRepository.Search(new Dictionary<string, object> { { nameof(Job.TenantId), tenantId }, { nameof(Job.JobStatusId), jobStatusId } });
+    public IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int jobStatusId, int? recordCount) =>
+        _jobRepository.Query(new Dictionary<string, object> { { nameof(Job.TenantId), tenantId }, { nameof(Job.JobStatusId), jobStatusId } }, recordCount);
 
 }

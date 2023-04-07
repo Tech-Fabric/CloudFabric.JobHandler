@@ -16,8 +16,8 @@ public interface IJobService
     void FailJob(Guid jobId, string errorMessage);
 
 
-    IEnumerable<Job> GetListJobsByTenantId(Guid tenantId);
-    IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int jobStatusId);
+    IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int? recordCount);
+    IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int jobStatusId, int? recordCount);
 
     IEnumerable<Job> GetListJobsByStatusId(int jobStatusId, int jobTypeId, int? rowCount);
 
