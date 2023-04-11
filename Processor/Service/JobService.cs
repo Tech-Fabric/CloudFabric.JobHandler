@@ -114,7 +114,10 @@ public class JobService : IJobService
         {
             _jobCompleteRepository.Insert(jobCompleted);
 
-            UpdateProcessStatus(GetJobProcessByJobId(jobId).Id, (int)JobStatuses.Failed);
+            var job = GetJobById(jobId);
+
+            if (job.JobStatusId == (int)JobStatuses.InProgress)
+                UpdateProcessStatus(GetJobProcessByJobId(jobId).Id, (int)JobStatuses.Failed);
 
             UpdateJobStatus(jobId, (int)JobStatuses.Failed);
 
@@ -187,4 +190,6 @@ public class JobService : IJobService
     public IEnumerable<Job> GetListJobsByTenantId(Guid tenantId, int jobStatusId, int? recordCount) =>
         _jobRepository.Query(new Dictionary<string, object> { { nameof(Job.TenantId), tenantId }, { nameof(Job.JobStatusId), jobStatusId } }, recordCount);
 
+    public Job GetJobById(Guid jobId) =>
+        _jobRepository.Get(jobId);
 }

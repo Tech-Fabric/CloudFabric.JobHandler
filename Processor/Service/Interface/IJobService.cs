@@ -12,6 +12,8 @@ public interface IJobService
 
     void UpdateProgress(Guid jobProcessId, int progress);
 
+    Job GetJobById(Guid jobId);
+
     void CompleteJob(Guid jobId);
 
     void FailJob(Guid jobId, string errorMessage);

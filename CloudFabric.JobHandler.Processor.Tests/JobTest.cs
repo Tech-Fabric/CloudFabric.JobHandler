@@ -97,6 +97,21 @@ public class JobTest
         Assert.Single(jobs);
     }
 
+    [Fact]
+    public void CreateAndFailEmptyParameter()
+    {
+        // Arrange
+        var job = _jobService.CreateJob(1, string.Empty, _tenantId);
+
+        // Act
+        var jobInDb = _jobService.GetJobById(job.Id);
+        if (string.IsNullOrEmpty(jobInDb.Parameters))
+            _jobService.FailJob(job.Id, "Parameters are empty");
+
+        jobInDb = _jobService.GetJobById(job.Id);
+        // Assert
+        Assert.Equal(jobInDb.JobStatusId, (int)JobStatuses.Failed);
+    }
 
     [Fact]
     public void CreateAndDeleteNewJob()
