@@ -114,7 +114,10 @@ public class JobService : IJobService
         {
             _jobCompleteRepository.Insert(jobCompleted);
 
-            UpdateProcessStatus(GetJobProcessByJobId(jobId).Id, (int)JobStatuses.Failed);
+            var jobProcess = GetJobProcessByJobId(jobId).Id;
+
+            if (jobProcess != null)
+                UpdateProcessStatus(jobProcess, (int)JobStatuses.Failed);
 
             UpdateJobStatus(jobId, (int)JobStatuses.Failed);
 
